@@ -1,9 +1,17 @@
-# from CRUD_PYTHON_MYSQL.repository.user_repository import select_all
+"""
+Métodos de servicio.Es decir son los 
+métodos que pasan la información a 
+nuestras páginas.
+"""
 from ..repository.user_repository import select_all, select_user_by_email,create_user,delete_user
 from ..models.user_model import User
 
+# metodos que ya sirven la informacion a nuestras páaginas
+# Aqí tambien se hace la lógica de negocio.
+# así como las validaciones.     
+
+
 def select_all_user_service():
-    #     # Llamamos al repositorio y retornamos los usuarios
     users = select_all()
     print(users)
     return users

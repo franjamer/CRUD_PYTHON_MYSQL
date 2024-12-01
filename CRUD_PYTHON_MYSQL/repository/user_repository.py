@@ -1,16 +1,27 @@
+""" Métodos que interactuan con la base de datos."""
+
+# Importamos todo lo que necesitamos.
+
 from ..models.user_model import User
 from .connect_db import connect
 from sqlmodel import Session, select
 
-# Métodos
+
+# Este método seleciona todos los elementos de la tabla que
+# estamos utilizando de nuestra base de datos.
 
 def select_all():
-    # Conexión a la base de datos
+    # Conexión a la base de datos 
     engine = connect()
+    # manejo de contexto. 
+    # Abrimos sesion 
     with Session(engine) as session:
         # Ejecutamos la consulta para obtener todos los usuarios
+        # La siguiente linea es equivalente a "SELECT * FROM user"
         query = select(User)
-        # devuelve una lista de todos los usuarios que tengamos en nuestra tabla de la base de datos
+        # devuelve una lista de todos los usuarios 
+        # que tengamos en nuestra tabla User
+        # y cerramos sesion
         return session.exec(query).all()
 
 def select_user_by_email(email: str):
@@ -43,3 +54,7 @@ def delete_user(email:str):
         query=select(User)
         return session.exec(query).all()
 
+"""
+En este directorio, se colocan por lo general los metodos que 
+interactuan con nuestra base de datos.
+"""

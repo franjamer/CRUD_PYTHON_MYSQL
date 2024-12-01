@@ -1,3 +1,11 @@
+"""
+PÁGINA PRINCIPAL DE LA TABLA USER
+
+Aquí se muestra todas las variables de estado, 
+métodos y procediminetos que actuarán directamente
+en la página web.
+"""
+
 import reflex as rx
 from .models.user_model import User
 from .services.user_service import select_all_user_service, select_user_by_email_service, create_user_service, delete_user_service
@@ -10,17 +18,14 @@ import asyncio
 
 # Mantiene los usuarios como diccionarios para evitar problemas.
 
-
+# clase principal
 class UserState(rx.State):
+    # variables de estado
     users: list[User]
-    # [{"name":"Jose","username":"JMM","phone":"99884488"},{
-    #      "name":"Paco","username":"fjmr","phone":"99988745"},{
-    #          "name":"Pepe","username":"Pepe","phone":"9333345"
-    #      }]
     user_buscar: str
     error_message: str
     error: str = ''
-
+# todos los métodos asincronos son de background.
     @rx.event(background=True)
     async def create_user(self, data: dict):
         async with self:
@@ -34,6 +39,7 @@ class UserState(rx.State):
                 self.error = be.args[0] if be.args else 'Error Desconocido'
         await self.handleNotify()
 
+# metodos de background
     @rx.event(background=True)
     # @rx.background #se quedó obsoleto
     async def get_all_user(self):
@@ -60,7 +66,8 @@ class UserState(rx.State):
         async with self:
             self.users = delete_user_service(email)
 
-
+# metodo que devolverá la página como tal,  con 
+# el decorador indicando la ruta el titulo, y que hará cuando se cargue.
 @rx.page(route='/user', title='users', on_load=UserState.get_all_user)
 def user_page() -> rx.Component:
     return rx.flex(
